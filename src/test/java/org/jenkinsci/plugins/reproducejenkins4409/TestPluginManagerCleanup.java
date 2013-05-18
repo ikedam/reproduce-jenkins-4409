@@ -23,37 +23,42 @@
  */
 package org.jenkinsci.plugins.reproducejenkins4409;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.jvnet.hudson.test.JenkinsRule;
+import java.io.IOException;
+
+import hudson.Util;
+
+import org.jvnet.hudson.test.TestPluginManager;
 
 /**
- * Test doing nothing
+ * Cleanup the temporary directory created by org.jvnet.hudson.test.TestPluginManager.
+ * Needed for Jenkins < 1.510
  * 
- * Any test causes JENKINS-4409 in Windows.
- * 
- * In Jenkins < 1.482, a temporary directory hudsonXXXXXXXtest is leaved.
- * This can be avoided only by upgrading target Jenkins to 1.482 or later.
- * 
+ * Call TestPluginManagerCleanup.registerCleanup() at least once from anywhere.
  */
-public class JENKINS4409JenkinsRuleTest
+public class TestPluginManagerCleanup
 {
-    static {
-        TestPluginManagerCleanup.registerCleanup();
-    }
+    private static Thread deleteThread = null;
     
-    @Rule
-    public JenkinsRule j = new JenkinsRule(){
-        protected void before() throws Throwable {
-            // uncommenting this causes JENKINS-4409
-            setPluginManager(null);
-            super.before();
-        }
-    };
-    
-    @Test
-    public void testSomething()
+    public static synchronized void registerCleanup()
     {
-        System.out.println("Do nothing!");
+        if(deleteThread != null)
+        {
+            return;
+        }
+        deleteThread = new Thread("HOTFIX: cleanup " + TestPluginManager.INSTANCE.rootDir) {
+            @Override public void run() {
+                if(TestPluginManager.INSTANCE != null
+                        && TestPluginManager.INSTANCE.rootDir != null
+                        && TestPluginManager.INSTANCE.rootDir.exists())
+                {
+                    try {
+                        Util.deleteRecursive(TestPluginManager.INSTANCE.rootDir);
+                    } catch (IOException x) {
+                        x.printStackTrace();
+                    }
+                }
+            }
+        };
+        Runtime.getRuntime().addShutdownHook(deleteThread);
     }
 }

@@ -32,6 +32,9 @@ import org.jvnet.hudson.test.HudsonTestCase;
  */
 public class JENKINS4409HudsonTestCaseTest extends HudsonTestCase
 {
+    static {
+        TestPluginManagerCleanup.registerCleanup();
+    }
     @Override
     protected void setUp() throws Exception
     {
