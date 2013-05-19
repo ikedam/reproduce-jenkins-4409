@@ -23,6 +23,7 @@
  */
 package org.jenkinsci.plugins.reproducejenkins4409;
 
+import org.jvnet.hudson.test.Bug;
 import org.jvnet.hudson.test.HudsonTestCase;
 
 /**
@@ -30,6 +31,7 @@ import org.jvnet.hudson.test.HudsonTestCase;
  * 
  * Any test causes JENKINS-4409 in Windows.
  */
+@Bug(4409)
 public class JENKINS4409HudsonTestCaseTest extends HudsonTestCase
 {
     static {

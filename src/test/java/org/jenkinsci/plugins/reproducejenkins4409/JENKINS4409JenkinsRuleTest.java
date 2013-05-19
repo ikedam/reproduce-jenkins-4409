@@ -23,8 +23,15 @@
  */
 package org.jenkinsci.plugins.reproducejenkins4409;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.jvnet.hudson.test.Bug;
 import org.jvnet.hudson.test.JenkinsRule;
 
 /**
@@ -36,8 +43,13 @@ import org.jvnet.hudson.test.JenkinsRule;
  * This can be avoided only by upgrading target Jenkins to 1.482 or later.
  * 
  */
+@Bug(4409)
+@RunWith(Parameterized.class)
 public class JENKINS4409JenkinsRuleTest
 {
+    // To measure the time to run tests.
+    private final static int REPEAT = 30;
+    
     static {
         TestPluginManagerCleanup.registerCleanup();
     }
@@ -51,9 +63,27 @@ public class JENKINS4409JenkinsRuleTest
         }
     };
     
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        List<Object[]> lst = new ArrayList<Object[]>(REPEAT);
+        for(int i = 1; i <= REPEAT; ++i)
+        {
+            lst.add(new Object[]{ i });
+        }
+        return lst;
+    }
+    
+    private int repeat = 0;
+    
+    public JENKINS4409JenkinsRuleTest(int repeat)
+    {
+        this.repeat = repeat;
+    }
+    
     @Test
     public void testSomething()
     {
+        System.out.println(String.format("= REPEAT %d/%d", repeat, REPEAT));
         System.out.println("Do nothing!");
     }
 }
