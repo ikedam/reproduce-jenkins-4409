@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.jvnet.hudson.test.Bug;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.TestEnvironment;
 
 /**
  * Test doing nothing
@@ -55,11 +56,20 @@ public class JENKINS4409JenkinsRuleTest
     }
     
     @Rule
-    public JenkinsRule j = new JenkinsRule(){
-        protected void before() throws Throwable {
-            // uncommenting this causes JENKINS-4409
-            setPluginManager(null);
-            super.before();
+    public JenkinsRule j = new JenkinsRule() {
+        protected void after() {
+            super.after();
+            if(TestEnvironment.get() != null)
+            {
+                try
+                {
+                    TestEnvironment.get().dispose();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
     };
     

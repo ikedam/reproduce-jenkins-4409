@@ -26,6 +26,7 @@ package org.jenkinsci.plugins.reproducejenkins4409;
 import java.io.IOException;
 
 import hudson.Util;
+import hudson.PluginWrapper;
 
 import org.jvnet.hudson.test.TestPluginManager;
 
@@ -51,6 +52,14 @@ public class TestPluginManagerCleanup
                         && TestPluginManager.INSTANCE.rootDir != null
                         && TestPluginManager.INSTANCE.rootDir.exists())
                 {
+                    // Work as PluginManager#stop
+                    for(PluginWrapper p: TestPluginManager.INSTANCE.getPlugins())
+                    {
+                        p.stop();
+                        p.releaseClassLoader();
+                    }
+                    TestPluginManager.INSTANCE.getPlugins().clear();
+                    System.gc();
                     try {
                         Util.deleteRecursive(TestPluginManager.INSTANCE.rootDir);
                     } catch (IOException x) {

@@ -37,13 +37,6 @@ public class JENKINS4409HudsonTestCaseTest extends HudsonTestCase
     static {
         TestPluginManagerCleanup.registerCleanup();
     }
-    @Override
-    protected void setUp() throws Exception
-    {
-        // uncommenting this causes JENKINS-4409
-        setPluginManager(null);
-        super.setUp();
-    }
     
     public void testSomething()
     {
