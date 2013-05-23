@@ -33,7 +33,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.jvnet.hudson.test.Bug;
 import org.jvnet.hudson.test.JenkinsRule;
-import org.jvnet.hudson.test.TestEnvironment;
 
 /**
  * Test doing nothing
@@ -51,27 +50,8 @@ public class JENKINS4409JenkinsRuleTest
     // To measure the time to run tests.
     private final static int REPEAT = 30;
     
-    static {
-        TestPluginManagerCleanup.registerCleanup();
-    }
-    
     @Rule
-    public JenkinsRule j = new JenkinsRule() {
-        protected void after() {
-            super.after();
-            if(TestEnvironment.get() != null)
-            {
-                try
-                {
-                    TestEnvironment.get().dispose();
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
+    public JenkinsRule j = new JenkinsRule();
     
     @Parameterized.Parameters
     public static Collection<Object[]> data() {

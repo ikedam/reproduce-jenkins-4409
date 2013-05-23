@@ -34,10 +34,6 @@ import org.jvnet.hudson.test.HudsonTestCase;
 @Bug(4409)
 public class JENKINS4409HudsonTestCaseTest extends HudsonTestCase
 {
-    static {
-        TestPluginManagerCleanup.registerCleanup();
-    }
-    
     public void testSomething()
     {
         System.out.println("Do nothing!");
