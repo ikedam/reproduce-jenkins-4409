@@ -19,8 +19,12 @@
       <url>http://repo.jenkins-ci.org/public/</url>
     </repository>
     <repository>
-      <id>repo</id>
+      <id>JENKINS-4409-2</id>
       <url>file://${project.basedir}/repo-FIX-JENKINS-4409-2</url>
+    </repository>
+    <repository>
+      <id>JENKINS-4409-3</id>
+      <url>file://${project.basedir}/repo-FIX-JENKINS-4409-3</url>
     </repository>
   </repositories>
 

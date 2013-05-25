@@ -23,6 +23,8 @@
  */
 package org.jenkinsci.plugins.reproducejenkins4409;
 
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +35,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.jvnet.hudson.test.Bug;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.JenkinsRule.WebClient;
+import org.xml.sax.SAXException;
 
 /**
  * Test doing nothing
@@ -71,9 +75,11 @@ public class JENKINS4409JenkinsRuleTest
     }
     
     @Test
-    public void testSomething()
+    public void testSomething() throws IOException, SAXException
     {
         System.out.println(String.format("= REPEAT %d/%d", repeat, REPEAT));
-        System.out.println("Do nothing!");
+        
+        WebClient wc = j.createWebClient();
+        wc.goTo("plugin/reproduce-jenkins-4409/test.html");
     }
 }
